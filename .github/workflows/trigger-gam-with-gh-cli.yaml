@@ -1,0 +1,41 @@
+name: Trigger GAM
+
+on:
+  workflow_dispatch: {}
+
+env:
+  COMPONENT: "Dashboard"
+
+jobs:
+  trigger-gam:
+    runs-on: ubuntu-latest
+    steps:
+
+    - uses: actions/create-github-app-token@v1
+      id: app-token
+      with:
+        app-id: ${{ secrets.APP_ID }}
+        private-key: ${{ secrets.PRIVATE_KEY }}
+        owner: red-hat-data-services
+        repositories: Gated-Auto-Merger
+
+    - name: Get GitHub App User ID
+      id: get-user-id
+      run: echo "user-id=$(gh api "/users/${{ steps.app-token.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
+      env:
+        GH_TOKEN: ${{ steps.app-token.outputs.token }}
+
+    - name: configure git committer string
+      run: |
+        git config --global user.name '${{ steps.app-token.outputs.app-slug }}[bot]'
+        git config --global user.email '${{ steps.get-user-id.outputs.user-id }}+${{ steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com>'
+
+
+    - name: Trigger GAM
+      env:
+        GH_TOKEN: ${{ steps.app-token.outputs.token }}
+      run: |
+        gh workflow run test.yaml --repo red-hat-data-services/Gated-Auto-Merger \
+                  --ref main \
+                  --field component=${{ env.COMPONENT }}
+                  --field workflow_run_id=$GITHUB_RUN_ID
