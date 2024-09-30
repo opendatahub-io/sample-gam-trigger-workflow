@@ -1,4 +1,4 @@
-name: Trigger GAM
+name: Trigger GAM with GH CLI
 
 on:
   workflow_dispatch: {}
