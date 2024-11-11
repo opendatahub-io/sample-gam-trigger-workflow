@@ -34,7 +34,7 @@ jobs:
       env:
         GH_TOKEN: ${{ steps.app-token.outputs.token }}
       run: |
-        gh workflow run test.yaml --repo red-hat-data-services/Gated-Auto-Merger \
+        gh workflow run test.yaml --repo red-hat-data-services/gam-poc \
                   --ref main \
                   --field component=${{ env.COMPONENT }} \
                   --field workflow_run_id=$GITHUB_RUN_ID
