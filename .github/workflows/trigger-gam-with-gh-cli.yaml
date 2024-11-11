@@ -17,7 +17,7 @@ jobs:
         app-id: ${{ secrets.APP_ID }}
         private-key: ${{ secrets.PRIVATE_KEY }}
         owner: red-hat-data-services
-        repositories: Gated-Auto-Merger
+        repositories: gam-poc
 
     - name: Get GitHub App User ID
       id: get-user-id
