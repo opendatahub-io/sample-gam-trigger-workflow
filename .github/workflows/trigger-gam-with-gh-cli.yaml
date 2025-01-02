@@ -9,6 +9,7 @@ env:
   GAM_WORKFLOW_OWNER: "red-hat-data-services"
   GAM_WORKFLOW_REPO: "gam-poc"
   # gh workflow list --repo <OWNER>/<REPO> --json id,name,path,state
+  # Note: Workflow ID Changes if the workflow file is renamed
   GAM_WORKFLOW_ID: "136057359"
 
 jobs:
