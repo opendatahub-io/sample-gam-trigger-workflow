@@ -54,6 +54,9 @@ jobs:
 
         # Print the output to the screen
         echo "Workflow details: $workflow_details"
+
+        # Exit if more than one workflow detail exists
+        if [ $(echo "$workflow_details" | jq 'length') -gt 1 ]; then echo "Error: More than one workflow detail found." && exit 1; fi
         
         # Save the output as GitHub Actions output
         echo "workflow_details=$workflow_details" >> $GITHUB_OUTPUT
@@ -61,7 +64,14 @@ jobs:
     - name: Watch Workflow
       env:
         GH_TOKEN: ${{ steps.app-token.outputs.token }}
-        workflow_details: ${{ fromJSON(steps.fetch-workflow-details.outputs.workflow_details) }}
-      run: gh run watch --repo red-hat-data-services/gam-poc ${{ env.workflow_details[0].databaseId }}
+      run: |
+        # Parse the workflow details into a variable
+        workflow_details="${{ steps.fetch-workflow-details.outputs.workflow_details }}"
+        
+        # Extract databaseId from the first workflow detail object
+        database_id=$(echo "$workflow_details" | jq '.[0].databaseId')
+        
+        echo "Watching workflow with ID: $database_id"
+        gh run watch --repo red-hat-data-services/gam-poc $database_id
         
     
