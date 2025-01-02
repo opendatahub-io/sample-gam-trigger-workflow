@@ -49,11 +49,10 @@ jobs:
         workflow_details=$(gh run list --repo red-hat-data-services/gam-poc \
                              --workflow 127286462 \
                              --json name,databaseId,url,workflowDatabaseId,workflowName,conclusion,createdAt,displayTitle,status \
-                             --jq 'map(select(.name | contains("${{ env.COMPONENT }}-$GITHUB_RUN_ID")))' \
-                          )
-    
+                             --jq 'map(select(.name | contains("Dashboard-12582005482")))')
+                             
         # Print the output to the screen
-        echo "Workflow details: $workflow_details"
+        echo "Workflow details: $(echo "$workflow_details" | jq '.')"
     
         # Exit if more than one workflow detail exists
         if [ $(echo "$workflow_details" | jq 'length') -gt 1 ]; then
