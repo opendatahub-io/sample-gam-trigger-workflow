@@ -61,16 +61,17 @@ jobs:
 
         # Extract first object and convert it to a compact string
         database_id=$(echo "$workflow_details" | jq '.[0].databaseId')
-        workflow_url=$(echo "$workflow_details" | jq '.[0].databaseId')
+        workflow_url=$(echo "$workflow_details" | jq '.[0].url')
     
         # Save the output as GitHub Actions Env Variables
         echo "database_id=$database_id" >> $GITHUB_ENV
         echo "workflow_url=$workflow_url" >> $GITHUB_ENV
     
-    - name: Watch Workflow
+    - name: Watch Workflow Logs
       env:
         GH_TOKEN: ${{ steps.app-token.outputs.token }}
       run: |
         gh run watch --repo red-hat-data-services/gam-poc ${{ env.database_id }}
-        echo "To watch full logs, click on the link below"
-        echo ${{ env.workflow_url }}
+
+        echo ""
+        echo "To watch full logs, click ${{ env.workflow_url }}"
