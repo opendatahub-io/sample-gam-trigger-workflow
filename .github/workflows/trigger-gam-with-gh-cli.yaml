@@ -59,32 +59,10 @@ jobs:
         if [ $(echo "$workflow_details" | jq 'length') -gt 1 ]; then
           echo "Error: More than one workflow detail found." && exit 1
         fi
+
+        echo "Watching workflow with ID: $database_id"
+        gh run watch --repo red-hat-data-services/gam-poc $(echo "$workflow_details" | jq '.[0].databaseId')
     
         # Save the output as GitHub Actions output (string format)
         echo "workflow_details=$workflow_details" >> $GITHUB_ENV  # Use GITHUB_ENV to pass to next steps
-    
-    - name: Watch Workflow
-      env:
-        GH_TOKEN: ${{ steps.app-token.outputs.token }}
-      run: |
-        # Access the workflow details from the environment
-        workflow_details="${{ env.workflow_details }}"
-    
-        # Ensure the workflow details are properly quoted and accessible
-        echo "Workflow details: $workflow_details"
-        
-        # Extract the first object from the JSON array and get the databaseId
-        database_id=$(echo "$workflow_details" | jq '.[0].databaseId')
-        
-        # Check if we got a valid databaseId
-        if [ -z "$database_id" ]; then
-          echo "Error: databaseId not found in workflow details."
-          exit 1
-        fi
-        
-        # Log the workflow databaseId and initiate watching
-        echo "Watching workflow with ID: $database_id"
-        gh run watch --repo red-hat-data-services/gam-poc "$database_id"
-
-        
     
