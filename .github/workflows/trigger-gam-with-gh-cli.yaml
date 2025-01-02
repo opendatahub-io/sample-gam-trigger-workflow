@@ -62,6 +62,6 @@ jobs:
       env:
         GH_TOKEN: ${{ steps.app-token.outputs.token }}
         workflow_details: ${{ fromJSON(steps.fetch-workflow-details.outputs.workflow_details) }}
-      run: gh run watch --repo red-hat-data-services/gam-poc ${{ workflow_details.databaseId }}
+      run: gh run watch --repo red-hat-data-services/gam-poc ${{ env.workflow_details.databaseId }}
         
     
