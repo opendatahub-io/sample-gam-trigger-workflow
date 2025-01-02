@@ -25,6 +25,7 @@ jobs:
       env:
         GH_TOKEN: ${{ steps.app-token.outputs.token }}
 
+    # Required because $GITHUB_RUN_ID isn't being resolved correctly in some commands in subsequent steps.
     - name: Configure GITHUB_RUN_ID as Env Variable
       run: |
         echo "GITHUB_RUN_ID: $GITHUB_RUN_ID"
