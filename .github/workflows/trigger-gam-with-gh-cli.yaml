@@ -84,9 +84,9 @@ jobs:
         GH_TOKEN: ${{ steps.app-token.outputs.token }}
       run: |
         gh run watch --repo ${{ env.GAM_WORKFLOW_OWNER }}/${{ env.GAM_WORKFLOW_REPO }} ${{ env.workflow_run_id }} --interval ${{ env.WATCH_INTERVAL_SECONDS }}
-        echo -e "\n"
+        printf "\n"
         echo "==============================================================================================================="
-        echo " Workflow Run Complete
+        echo " Workflow Run Complete!"
         echo "==============================================================================================================="
         echo "Workflow Name: ${{ env.workflow_run_name }}"
         echo "To view complete logs, click ${{ env.workflow_run_url }}"
