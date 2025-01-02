@@ -25,17 +25,15 @@ jobs:
       env:
         GH_TOKEN: ${{ steps.app-token.outputs.token }}
 
-    - name: configure git committer string
+    - name: Configure GITHUB_RUN_ID as Env Variable
       run: |
-        git config --global user.name '${{ env.COMPONENT }}'
-
+        echo "GITHUB_RUN_ID: $GITHUB_RUN_ID"
+        echo "ID=$GITHUB_RUN_ID" >> $GITHUB_ENV
 
     - name: Trigger GAM
       env:
         GH_TOKEN: ${{ steps.app-token.outputs.token }}
       run: |
-        echo "GITHUB_RUN_ID: $GITHUB_RUN_ID"
-        echo "ID=$GITHUB_RUN_ID" >> $GITHUB_ENV
         gh workflow run test.yaml --repo red-hat-data-services/gam-poc \
                   --ref main \
                   --field component=${{ env.COMPONENT }} \
