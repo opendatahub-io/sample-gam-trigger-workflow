@@ -11,6 +11,7 @@ env:
   # gh workflow list --repo <OWNER>/<REPO> --json id,name,path,state
   # Note: Workflow ID Changes if the workflow file is renamed
   GAM_WORKFLOW_ID: "136057359"
+  WATCH_INTERVAL_SECONDS: "20"
 
 jobs:
   trigger-gam:
@@ -82,7 +83,7 @@ jobs:
       env:
         GH_TOKEN: ${{ steps.app-token.outputs.token }}
       run: |
-        gh run watch --repo ${{ env.GAM_WORKFLOW_OWNER }}/${{ env.GAM_WORKFLOW_REPO }} ${{ env.workflow_run_id }}
+        gh run watch --repo ${{ env.GAM_WORKFLOW_OWNER }}/${{ env.GAM_WORKFLOW_REPO }} ${{ env.workflow_run_id }} --interval ${{ env.WATCH_INTERVAL_SECONDS }}
 
         echo ""
         echo "Workflow Name: ${{ env.workflow_run_name }}"
