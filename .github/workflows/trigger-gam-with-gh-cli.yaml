@@ -5,7 +5,6 @@ on:
 
 env:
   COMPONENT: "Dashboard"
-  ID: ${GITHUB_RUN_ID}
 
 jobs:
   trigger-gam:
@@ -35,6 +34,7 @@ jobs:
       env:
         GH_TOKEN: ${{ steps.app-token.outputs.token }}
       run: |
+        echo "ID=${GITHUB_RUN_ID}" >> $GITHUB_ENV
         gh workflow run test.yaml --repo red-hat-data-services/gam-poc \
                   --ref main \
                   --field component=${{ env.COMPONENT }} \
