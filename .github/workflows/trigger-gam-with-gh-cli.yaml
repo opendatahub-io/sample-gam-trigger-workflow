@@ -45,7 +45,7 @@ jobs:
         gh workflow run ${{ env.GAM_WORKFLOW_ID }} --repo ${{ env.GAM_WORKFLOW_OWNER }}/${{ env.GAM_WORKFLOW_REPO }} \
                   --ref main \
                   --field component=${{ env.COMPONENT }} \
-                  --field gam_trigger_repository=${{ env.GAM_TRIGGER_REPOSITORY }}
+                  --field gam_trigger_repository=${{ env.GAM_TRIGGER_REPOSITORY }} \
                   --field gam_trigger_run_id=${{ env.GAM_TRIGGER_RUN_ID }}
 
     - name: Fetch GAM Workflow Run details
