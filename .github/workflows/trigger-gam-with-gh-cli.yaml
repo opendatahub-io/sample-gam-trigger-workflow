@@ -79,12 +79,14 @@ jobs:
         echo "workflow_run_name=$workflow_run_name" >> $GITHUB_ENV
         echo "workflow_run_url=$workflow_run_url" >> $GITHUB_ENV
     
-    - name: Watch Workflow Logs
+    - name: Watch Workflow Progress
       env:
         GH_TOKEN: ${{ steps.app-token.outputs.token }}
       run: |
         gh run watch --repo ${{ env.GAM_WORKFLOW_OWNER }}/${{ env.GAM_WORKFLOW_REPO }} ${{ env.workflow_run_id }} --interval ${{ env.WATCH_INTERVAL_SECONDS }}
-
-        echo ""
+        echo -e "\n"
+        echo "==============================================================================================================="
+        echo " Workflow Run Complete
+        echo "==============================================================================================================="
         echo "Workflow Name: ${{ env.workflow_run_name }}"
-        echo "To watch full logs, click ${{ env.workflow_run_url }}"
+        echo "To view complete logs, click ${{ env.workflow_run_url }}"
