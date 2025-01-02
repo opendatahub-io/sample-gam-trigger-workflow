@@ -5,6 +5,10 @@ on:
 
 env:
   COMPONENT: "Dashboard"
+  # Should this be set as organization secret?
+  GAM_WORKFLOW_OWNER: "red-hat-data-services"
+  GAM_WORKFLOW_REPO: "gam-poc"
+  GAM_WORKFLOW_ID: "127286462"
 
 jobs:
   trigger-gam:
@@ -16,8 +20,8 @@ jobs:
       with:
         app-id: ${{ secrets.APP_ID }}
         private-key: ${{ secrets.PRIVATE_KEY }}
-        owner: red-hat-data-services
-        repositories: gam-poc
+        owner: ${{ env.GAM_WORKFLOW_OWNER }}
+        repositories: ${{ env.GAM_WORKFLOW_REPO }}
 
     - name: Get GitHub App User ID
       id: get-user-id
@@ -35,20 +39,20 @@ jobs:
       env:
         GH_TOKEN: ${{ steps.app-token.outputs.token }}
       run: |
-        gh workflow run test.yaml --repo red-hat-data-services/gam-poc \
+        gh workflow run test.yaml --repo ${{ env.GAM_WORKFLOW_OWNER }}/${{ env.GAM_WORKFLOW_REPO }} \
                   --ref main \
                   --field component=${{ env.COMPONENT }} \
-                  --field workflow_run_id=${{ env.ID }}
+                  --field id=${{ env.ID }}
 
-    - name: Fetch GAM Trigger Workflow details
+    - name: Fetch GAM Workflow Run details
       env:
         GH_TOKEN: ${{ steps.app-token.outputs.token }}
       run: |
         sleep 5  # Wait for 5 seconds
         
         # Fetch the triggered workflow details
-        workflow_details=$(gh run list --repo red-hat-data-services/gam-poc \
-                             --workflow 127286462 \
+        workflow_details=$(gh run list --repo ${{ env.GAM_WORKFLOW_OWNER }}/${{ env.GAM_WORKFLOW_REPO }} \
+                             --workflow ${{ env.GAM_WORKFLOW_ID }} \
                              --json name,databaseId,url,workflowDatabaseId,workflowName,conclusion,createdAt,displayTitle,status \
                              --jq 'map(select(.name | contains("${{ env.COMPONENT }}-${{ env.ID }}")))')
                              
@@ -60,12 +64,12 @@ jobs:
           echo "Error: More than one workflow detail found." && exit 1
         fi
 
-        # Extract first object and convert it to a compact string
+        # Extract Details
         workflow_run_id=$(echo "$workflow_details" | jq '.[0].databaseId')
         workflow_run_name=$(echo "$workflow_details" | jq '.[0].name')
         workflow_run_url=$(echo "$workflow_details" | jq '.[0].url')
     
-        # Save the output as GitHub Actions Env Variables
+        # Save the details as GitHub Actions Env Variables
         echo "workflow_run_id=$workflow_run_id" >> $GITHUB_ENV
         echo "workflow_run_name=$workflow_run_name" >> $GITHUB_ENV
         echo "workflow_run_url=$workflow_run_url" >> $GITHUB_ENV
@@ -74,7 +78,7 @@ jobs:
       env:
         GH_TOKEN: ${{ steps.app-token.outputs.token }}
       run: |
-        gh run watch --repo red-hat-data-services/gam-poc ${{ env.workflow_run_id }}
+        gh run watch --repo ${{ env.GAM_WORKFLOW_OWNER }}/${{ env.GAM_WORKFLOW_REPO }} ${{ env.workflow_run_id }}
 
         echo ""
         echo "Workflow Name: ${{ env.workflow_run_name }}"
