@@ -41,7 +41,7 @@ jobs:
       env:
         GH_TOKEN: ${{ steps.app-token.outputs.token }}
       run: |
-        gh workflow run test.yaml --repo ${{ env.GAM_WORKFLOW_OWNER }}/${{ env.GAM_WORKFLOW_REPO }} \
+        gh workflow run ${{ env.GAM_WORKFLOW_ID }} --repo ${{ env.GAM_WORKFLOW_OWNER }}/${{ env.GAM_WORKFLOW_REPO }} \
                   --ref main \
                   --field component=${{ env.COMPONENT }} \
                   --field id=${{ env.ID }}
