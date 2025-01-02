@@ -38,3 +38,30 @@ jobs:
                   --ref main \
                   --field component=${{ env.COMPONENT }} \
                   --field workflow_run_id=$GITHUB_RUN_ID
+
+    - name: Fetch GAM Trigger Workflow details
+      id: fetch-workflow-details
+      env:
+        GH_TOKEN: ${{ steps.app-token.outputs.token }}
+      run: |
+        sleep 5  # Wait for 5 seconds
+        
+        # Fetch the triggered workflow details
+        workflow_details=$(gh run list --repo red-hat-data-services/gam-poc \
+                             --workflow 127286462 \
+                             --json name,databaseId,url,workflowDatabaseId,workflowName,conclusion,createdAt,displayTitle,status \
+                             --jq 'map(select(.name | contains("Dashboard-12582005482")))')
+
+        # Print the output to the screen
+        echo "Workflow details: $workflow_details"
+        
+        # Save the output as GitHub Actions output
+        echo "workflow_details=$workflow_details" >> $GITHUB_OUTPUT
+
+    - name: Watch Workflow
+      env:
+        GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        workflow_details: ${{ fromJSON(steps.fetch-workflow-details.outputs.workflow_details) }}
+      run: gh run watch --repo red-hat-data-services/gam-poc ${{ workflow_details.databaseId }}
+        
+    
