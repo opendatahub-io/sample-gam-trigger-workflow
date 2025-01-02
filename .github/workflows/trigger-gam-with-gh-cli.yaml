@@ -69,9 +69,8 @@ jobs:
     - name: Watch Workflow
       env:
         GH_TOKEN: ${{ steps.app-token.outputs.token }}
-        workflow_details: ${{ fromJSON(steps.fetch-workflow-details.outputs.workflow_details) }}
       run: |
-        echo "$workflow_details" | jq ."
+        echo ${{ steps.fetch-workflow-details.outputs.workflow_details
         echo "Watching workflow"
-        gh run watch --repo red-hat-data-services/gam-poc ${{ env.workflow_details.databaseId }}
+        gh run watch --repo red-hat-data-services/gam-poc ${{ steps.fetch-workflow-details.outputs.workflow_details.databaseId }}
     
