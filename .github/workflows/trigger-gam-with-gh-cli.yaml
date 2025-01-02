@@ -40,7 +40,6 @@ jobs:
                   --field workflow_run_id=$GITHUB_RUN_ID
 
     - name: Fetch GAM Trigger Workflow details
-      id: fetch-workflow-details
       env:
         GH_TOKEN: ${{ steps.app-token.outputs.token }}
       run: |
@@ -62,15 +61,17 @@ jobs:
         fi
 
         # Extract first object and convert it to a compact string
-        workflow_details=$(echo "$workflow_details" | jq '.[0]' | jq -c)
+        database_id=$(echo "$workflow_details" | jq '.[0].databaseId')
+        workflow_url=$(echo "$workflow_details" | jq '.[0].databaseId')
     
-        # Save the output as GitHub Actions output (string format)
-        echo "workflow_details=$workflow_details" >> $GITHUB_OUTPUT
+        # Save the output as GitHub Actions Env Variables
+        echo "database_id=$database_id" >> $GITHUB_ENV
+        echo "workflow_url=$workflow_url" >> $GITHUB_ENV
     
     - name: Watch Workflow
       env:
         GH_TOKEN: ${{ steps.app-token.outputs.token }}
       run: |
-        gh run watch --repo red-hat-data-services/gam-poc $(echo '${{ steps.fetch-workflow-details.outputs.workflow_details }}' | jq '.databaseId')
+        gh run watch --repo red-hat-data-services/gam-poc ${{ env.database_id }}
         echo "To watch full logs, click on the link below"
-        echo '${{ steps.fetch-workflow-details.outputs.workflow_details }}' | jq '.url'
+        echo ${{ env.workflow_url }}
