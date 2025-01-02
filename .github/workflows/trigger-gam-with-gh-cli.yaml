@@ -8,7 +8,8 @@ env:
   # Should this be set as organization secret?
   GAM_WORKFLOW_OWNER: "red-hat-data-services"
   GAM_WORKFLOW_REPO: "gam-poc"
-  GAM_WORKFLOW_ID: "127286462"
+  # gh workflow list --repo <OWNER>/<REPO> --json id,name,path,state
+  GAM_WORKFLOW_ID: "136057359"
 
 jobs:
   trigger-gam:
