@@ -49,7 +49,7 @@ jobs:
         workflow_details=$(gh run list --repo red-hat-data-services/gam-poc \
                              --workflow 127286462 \
                              --json name,databaseId,url,workflowDatabaseId,workflowName,conclusion,createdAt,displayTitle,status \
-                             --jq 'map(select(.name | contains("Dashboard-12582005482")))')
+                             --jq 'map(select(.name | contains("${{ env.COMPONENT }}-$GITHUB_RUN_ID")))')
                              
         # Print the output to the screen
         echo "Workflow details: $(echo "$workflow_details" | jq '.')"
