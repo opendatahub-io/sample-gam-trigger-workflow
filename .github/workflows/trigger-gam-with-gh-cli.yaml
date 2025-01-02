@@ -72,5 +72,6 @@ jobs:
       run: |
         echo ${{ steps.fetch-workflow-details.outputs.workflow_details }}
         echo "Watching workflow"
-        gh run watch --repo red-hat-data-services/gam-poc $(echo '${{ steps.fetch-workflow-details.outputs.workflow_details }}' | jq '.databaseId')
+        gh run watch --repo red-hat-data-services/gam-poc gh run watch --repo red-hat-data-services/gam-poc ${{ fromJSON(steps.fetch-workflow-details.outputs.workflow_details).databaseId }}
+
     
