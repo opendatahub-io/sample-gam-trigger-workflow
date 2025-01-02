@@ -60,9 +60,18 @@ jobs:
           echo "Error: More than one workflow detail found." && exit 1
         fi
 
-        echo "Watching workflow with ID: $database_id"
-        gh run watch --repo red-hat-data-services/gam-poc $(echo "$workflow_details" | jq '.[0].databaseId')
+        # Convert array to single object
+        workflow_details=$(echo "$workflow_details" | jq '.[0]')
     
         # Save the output as GitHub Actions output (string format)
-        echo "workflow_details=$workflow_details" >> $GITHUB_ENV  # Use GITHUB_ENV to pass to next steps
+        echo "workflow_details=$workflow_details" >> $GITHUB_OUTPUT
+    
+    - name: Watch Workflow
+      env:
+        GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        workflow_details: ${{ fromJSON(steps.fetch-workflow-details.outputs.workflow_details) }}
+      run: |
+        echo "$workflow_details" | jq ."
+        echo "Watching workflow"
+        gh run watch --repo red-hat-data-services/gam-poc ${{ env.workflow_details.databaseId }}
     
