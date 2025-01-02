@@ -60,8 +60,8 @@ jobs:
           echo "Error: More than one workflow detail found." && exit 1
         fi
 
-        # Convert array to single object
-        workflow_details=$(echo "$workflow_details" | jq '.[0]')
+        # Extract first object and convert it to a compact string
+        workflow_details=$(echo "$workflow_details" | jq '.[0]' | jq -c '.')
     
         # Save the output as GitHub Actions output (string format)
         echo "workflow_details=$workflow_details" >> $GITHUB_OUTPUT
