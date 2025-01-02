@@ -37,7 +37,7 @@ jobs:
         gh workflow run test.yaml --repo red-hat-data-services/gam-poc \
                   --ref main \
                   --field component=${{ env.COMPONENT }} \
-                  --field workflow_run_id=${{ env.GITHUB_RUN_ID }}
+                  --field workflow_run_id=${GITHUB_RUN_ID}
 
     - name: Fetch GAM Trigger Workflow details
       env:
@@ -49,7 +49,7 @@ jobs:
         workflow_details=$(gh run list --repo red-hat-data-services/gam-poc \
                              --workflow 127286462 \
                              --json name,databaseId,url,workflowDatabaseId,workflowName,conclusion,createdAt,displayTitle,status \
-                             --jq 'map(select(.name | contains("${{ env.COMPONENT }}-${{ env.GITHUB_RUN_ID }}")))')
+                             --jq 'map(select(.name | contains("${{ env.COMPONENT }}-${GITHUB_RUN_ID}")))')
                              
         # Print the output to the screen
         echo "Workflow details: $(echo "$workflow_details" | jq '.')"
