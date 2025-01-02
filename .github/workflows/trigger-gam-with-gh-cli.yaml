@@ -71,7 +71,6 @@ jobs:
       env:
         GH_TOKEN: ${{ steps.app-token.outputs.token }}
       run: |
-        gh run watch --repo red-hat-data-services/gam-poc gh run watch --repo red-hat-data-services/gam-poc ${{ fromJSON(steps.fetch-workflow-details.outputs.workflow_details).databaseId }}
-        
+        gh run watch --repo red-hat-data-services/gam-poc $(echo '${{ steps.fetch-workflow-details.outputs.workflow_details }}' | jq '.databaseId')
         echo "To watch full logs, click on the link below"
-        echo ${{ fromJSON(steps.fetch-workflow-details.outputs.workflow_details).url }}
+        echo '${{ steps.fetch-workflow-details.outputs.workflow_details }}' | jq '.url'
