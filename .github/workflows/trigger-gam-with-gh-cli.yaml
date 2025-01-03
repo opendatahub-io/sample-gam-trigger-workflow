@@ -7,11 +7,11 @@ env:
   COMPONENT: "Dashboard"
   # Should this be set as organization secret?
   GAM_WORKFLOW_OWNER: "red-hat-data-services"
-  GAM_WORKFLOW_REPO: "gam-poc"
+  GAM_WORKFLOW_REPO: "Gated-Auto-Merger"
   # gh workflow list --repo <OWNER>/<REPO> --json id,name,path,state
   # Note: Workflow ID Changes if the workflow file is renamed
-  GAM_WORKFLOW_ID: "136057359"
-  WATCH_INTERVAL_SECONDS: "20"
+  GAM_WORKFLOW_ID: "105878328"
+  WATCH_INTERVAL_SECONDS: "10"
 
 jobs:
   trigger-gam:
