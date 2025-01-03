@@ -4,7 +4,7 @@ on:
   workflow_dispatch: {}
 
 env:
-  COMPONENT: "Dashboard"
+  COMPONENT: "test"
   # Should this be set as organization secret?
   GAM_WORKFLOW_OWNER: "red-hat-data-services"
   GAM_WORKFLOW_REPO: "gam-poc"
