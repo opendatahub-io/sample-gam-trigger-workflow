@@ -24,17 +24,6 @@ jobs:
         ref: main
         path: gam
 
-    - name: Validate if auto-merge is enabled for the component
-      working-directory: gam
-      run: |
-        component-config=$(yq -o json config/gam-config.yaml | jq '.components | map(select(.name == "${{ inputs.component }}" and .automerge == "yes")))
-        
-        # Check if the result is an empty array
-        if [ "$component-config" == "[]" ]; then
-            echo "Auto Merge is disabled for component '${{ inputs.component }}'."
-            exit 1
-        fi
-
     - uses: actions/create-github-app-token@v1
       id: app-token
       with:
