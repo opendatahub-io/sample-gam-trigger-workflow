@@ -107,4 +107,4 @@ jobs:
         echo "==============================================================================================================="
         echo "Workflow Name: ${{ env.workflow_run_name }}"
         echo "To view complete logs, click ${{ env.workflow_run_url }}"
-        echo "To view the execution metadata, click https://github.com/${{ env.GAM_WORKFLOW_OWNER }}/${{ env.GAM_WORKFLOW_REPO }}/tree/metadata/executions/${{ env.COMPONENT }}/${{ env.EXECUTION_ID }}"
+        echo "To view the execution metadata, click https://github.com/${{ env.GAM_WORKFLOW_OWNER }}/${{ env.GAM_WORKFLOW_REPO }}/tree/metadata/executions/${{ env.COMPONENT }}/${{ env.GAM_EXECUTION_ID }}"
