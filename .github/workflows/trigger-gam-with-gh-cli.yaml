@@ -10,7 +10,7 @@ env:
   GAM_WORKFLOW_REPO: "Gated-Auto-Merger"
   # gh workflow list --repo <OWNER>/<REPO> --json id,name,path,state
   # Note: Workflow ID Changes if the workflow file is renamed
-  GAM_WORKFLOW_ID: "105878328"
+  GAM_WORKFLOW_ID: "136351503"
   WATCH_INTERVAL_SECONDS: "10"
 
 jobs:
