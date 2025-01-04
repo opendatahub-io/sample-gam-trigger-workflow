@@ -87,9 +87,24 @@ jobs:
       run: |
         gh run watch --repo ${{ env.GAM_WORKFLOW_OWNER }}/${{ env.GAM_WORKFLOW_REPO }} ${{ env.workflow_run_id }} --interval ${{ env.WATCH_INTERVAL_SECONDS }}
         printf "\n"
+        
+        conclusion=$(gh run view --repo ${{ env.GAM_WORKFLOW_OWNER }}/${{ env.GAM_WORKFLOW_REPO }} ${{ env.workflow_run_id }} --json conclusion | jq -r '.conclusion')
+
+        # Exit if workflow run failed
+        if [ "$conclusion" != "success" ]; then
+          echo "The workflow run did not succeed. Exiting..."
+          echo "To view complete logs, click ${{ env.workflow_run_url }}"
+          exit 1
+        fi
+        
+        
+    - name: Print Execution Metadata File Link
+      env:
+        GH_TOKEN: ${{ steps.app-token.outputs.token }}
+      run: |
         echo "==============================================================================================================="
-        echo " Workflow Run Complete!"
+        echo " Gated Auto Merger Triggered Successfully!"
         echo "==============================================================================================================="
         echo "Workflow Name: ${{ env.workflow_run_name }}"
         echo "To view complete logs, click ${{ env.workflow_run_url }}"
-        echo "To view the execution metadata, click https://github.com/${{ env.GAM_WORKFLOW_OWNER }}/${{ env.GAM_WORKFLOW_REPO }}/tree/metadata/executions/${{ env.COMPONENT }}/${{ env.EXECUTION_ID }}
+        echo "To view the execution metadata, click https://github.com/${{ env.GAM_WORKFLOW_OWNER }}/${{ env.GAM_WORKFLOW_REPO }}/tree/metadata/executions/${{ env.COMPONENT }}/${{ env.EXECUTION_ID }}"
