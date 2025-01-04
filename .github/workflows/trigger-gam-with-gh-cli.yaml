@@ -61,7 +61,7 @@ jobs:
         workflow_details=$(gh run list --repo ${{ env.GAM_WORKFLOW_OWNER }}/${{ env.GAM_WORKFLOW_REPO }} \
                              --workflow ${{ env.GAM_WORKFLOW_ID }} \
                              --json name,databaseId,url,workflowDatabaseId,workflowName,conclusion,createdAt,displayTitle,status \
-                             --jq 'map(select(.name | contains("${{ env.COMPONENT }}-${{ env.GAM_EXECUTION_ID }}")))')
+                             --jq 'map(select(.name | contains("${{ env.COMPONENT }}-${{ env.GAM_TRIGGER_RUN_ID }}")))')
                              
         # Print the output to the screen
         echo "Workflow details: $(echo "$workflow_details" | jq '.')"
