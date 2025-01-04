@@ -32,10 +32,11 @@ jobs:
       env:
         GH_TOKEN: ${{ steps.app-token.outputs.token }}
 
-    # Required because $GITHUB_REPOSITORY isn't being resolved correctly in some commands in subsequent steps.
+    # Required because variable substituion isn't happening in gh cli commands.
     - name: Set Env Variable
       run: |
         echo "GAM_TRIGGER_REPOSITORY=$GITHUB_REPOSITORY" | tee -a $GITHUB_ENV
+        echo "GAM_TRIGGER_RUN_ID=$GITHUB_RUN_ID" | tee -a $GITHUB_ENV
         echo "EXECUTION_ID=$(date +"%d%m%y%H%M%S%6N")" | tee -a $GITHUB_ENV
 
 
@@ -47,6 +48,7 @@ jobs:
                   --ref main \
                   --field component=${{ env.COMPONENT }} \
                   --field gam_trigger_repository=${{ env.GAM_TRIGGER_REPOSITORY }} \
+                  --field gam_trigger_run_id=${{ env.GAM_TRIGGER_RUN_ID }} \
                   --field execution_id=${{ env.EXECUTION_ID }}
 
     - name: Fetch GAM Workflow Run details
