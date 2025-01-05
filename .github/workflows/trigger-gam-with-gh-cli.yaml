@@ -16,13 +16,7 @@ env:
 jobs:
   trigger-gam:
     runs-on: ubuntu-latest
-    steps:      
-    - name: Checkout GAM
-      uses: actions/checkout@v3
-      with:
-        repository: ${{ env.GAM_WORKFLOW_OWNER }}/${{ env.GAM_WORKFLOW_REPO }}
-        ref: main
-        path: gam
+    steps:
 
     - uses: actions/create-github-app-token@v1
       id: app-token
